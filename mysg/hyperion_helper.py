@@ -17,7 +17,14 @@ TSUB = 1600.
 NVIEW = 9
 
 
-def setup_model(parfile, output, imaging=True):
+def setup_model(parfile, output, imaging=True, r_temp=None):
+    """
+    Write the Hyperion input file for the model in parfile to output + '.rtin'.
+
+    imaging : compute images and SEDs (otherwise only the temperature)
+    r_temp : outer envelope radius set by the ambient temperature (cm), instead of computing it from the
+        optically thin dust temperature (used to rerun existing models with their original radius)
+    """
 
     # Read in model parameters
     par = read_parfile(parfile, nested=True)
@@ -165,9 +172,13 @@ def setup_model(parfile, output, imaging=True):
         if 'envelope' in par:
 
             # Find radius where the optically thin temperature drops to the
-            # ambient temperature. We can do this only if we've already set
-            # up all the sources of emission beforehand (which we have)
-            rmax_temp = OptThinRadius(ambient_temperature).evaluate(m.star, envelope.dust)
+            # ambient temperature, unless the radius is given. We can do this
+            # only if we've already set up all the sources of emission
+            # beforehand (which we have)
+            if r_temp is None:
+                rmax_temp = OptThinRadius(ambient_temperature).evaluate(m.star, envelope.dust)
+            else:
+                rmax_temp = r_temp
 
             # Find radius where the envelope density drops to the ambient density
             rmax_dens = envelope.outermost_radius(ambient.rho)

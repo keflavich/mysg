@@ -1,6 +1,10 @@
 1.2 (unreleased)
 ----------------
 
+- Added the ``r_temp`` option to ``setup_model`` to set the outer envelope
+  radius instead of computing it from the ambient temperature (T. Richardson,
+  used for the R24 models).
+
 - Fixed critical bug: the dust file included since version 1.0.1 contained
   optical properties computed with a version of bhmie that had a bug, which
   gave an incorrect albedo and scattering matrix. The dust file is no longer
