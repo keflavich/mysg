@@ -17,13 +17,14 @@ TSUB = 1600.
 NVIEW = 9
 
 
-def setup_model(parfile, output, imaging=True, r_temp=None):
+def setup_model(parfile, output, imaging=True, r_temp=None, atmos_dir=None):
     """
     Write the Hyperion input file for the model in parfile to output + '.rtin'.
 
     imaging : compute images and SEDs (otherwise only the temperature)
     r_temp : outer envelope radius set by the ambient temperature (cm), instead of computing it from the
         optically thin dust temperature (used to rerun existing models with their original radius)
+    atmos_dir : directory of stellar atmospheres (see mysg.atmosphere.interp_atmos; default: bundled set)
     """
 
     # Read in model parameters
@@ -62,7 +63,7 @@ def setup_model(parfile, output, imaging=True, r_temp=None):
                         * sigma * par['star']['temperature'] ** 4.
 
     # Interpolate and set spectrum
-    nu, fnu = interp_atmos(par['star']['temperature'])
+    nu, fnu = interp_atmos(par['star']['temperature'], atmos_dir=atmos_dir)
     m.star.spectrum = (nu, fnu)
 
     subtract_from_ambient = []

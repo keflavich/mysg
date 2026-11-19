@@ -1,6 +1,11 @@
 1.2 (unreleased)
 ----------------
 
+- Added the ``atmos_dir`` option to ``setup_model`` and ``interp_atmos`` to use
+  another set of stellar atmospheres, and ``scripts/make_atmospheres.py`` to
+  build sets with one metallicity at all temperatures (see
+  ``mysg/data/README.md``). The default set is unchanged.
+
 - Added the ``r_temp`` option to ``setup_model`` to set the outer envelope
   radius instead of computing it from the ambient temperature (T. Richardson,
   used for the R24 models).

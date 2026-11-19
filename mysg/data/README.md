@@ -82,6 +82,46 @@ The files match the ``g40`` (log g = 4.0) column of the ``ckp00`` models at
 to within 0.05% at all 65 temperatures, once those are normalized in the same
 way. The only other difference is an extra point at a wavelength of 1 cm.
 
+## Atmospheres with one metallicity at all temperatures
+
+``scripts/make_atmospheres.py MH OUTDIR`` builds a directory with the same
+layout (``phoenix/`` and ``kurucz/``) in which both families have
+[M/H] = MH, so that ``setup_model(..., atmos_dir=OUTDIR)`` gives models with
+one metallicity at every temperature. All spectra have log g = 4.0 and
+scaled-solar abundances, and the ``z`` in the file names is the [M/H] of both
+families.
+
+* Below 4000 K: BT-Settl models with the Asplund et al. (2009) abundances
+  (Allard et al. 2012, "BT-Settl AGSS2009"), downloaded from the SVO Theory
+  service (model ``bt-settl-agss``, alpha = 0) and resampled, conserving flux,
+  onto the wavelength grid of the STScI file
+  ``grid/phoenix/phoenixm00/phoenixm00_3000.fits``. That STScI grid (delivered
+  in 2021) is the [M/H] = 0 member of the same models; the other STScI PHOENIX
+  metallicities are a 2011 delivery that subsamples the spectra point by point
+  and are not used. Scaled-solar spectra with log g = 4.0 exist for 2000-4000 K
+  at [M/H] = -0.5, 0.0, +0.3 and +0.5; at [M/H] = -1.0 the grid has only
+  alpha-enhanced spectra above 2600 K. These tables are kept proportional to
+  the surface flux (not normalized), as in the solar tables of T. Richardson
+  (2026) used for the R24 v1.3 models, and have one extra point at 1 cm with the
+  Rayleigh-Jeans slope.
+* At and above 4000 K: the Castelli & Kurucz (2004) models from the STScI
+  ``ck04models`` grid (``ckm05``, ``ckp00``, ``ckp02``, ``ckp05``, ...), column
+  ``g40``, converted as the bundled Kurucz files.
+
+For MH = 0 the PHOENIX tables agree with Richardson's solar tables (made from
+the STScI ``phoenixm00`` files) to 0.0006 in the fraction of the luminosity in
+each broad band (0.4-0.7, 0.7-1, 1-2.5, 2.5-5 and 5-30 micron) at all
+temperatures but 2600 K, where the SVO and STScI spectra differ by up to
+0.0016 (up to 4% in 0.1 dex bands between 0.7 and 1.8 micron). The Kurucz
+tables agree with the bundled ones to 0.05% (99th percentile; 2% at the 1 cm
+point).
+
+From 2300 to 4000 K the fraction of the luminosity in each band changes
+monotonically with [M/H] from -0.5 to +0.5. At 2000-2200 K, where the
+BT-Settl atmospheres have dust clouds, it does not, and the solar spectra at
+2000 K and 2100 K differ more from each other (0.12 of the luminosity moves
+between bands) than any other neighbouring pair.
+
 ## References
 
 * Brott, I. & Hauschildt, P. H. 2005, "A PHOENIX Model Atmosphere Grid for
